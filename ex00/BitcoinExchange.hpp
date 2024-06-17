@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 11:33:47 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 17:54:38 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:21:20 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fstream>
 # include <sstream>
 # include <sys/stat.h>
+# include <iomanip>
 
 class BitcoinExchange
 {

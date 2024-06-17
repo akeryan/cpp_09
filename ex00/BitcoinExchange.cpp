@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 12:59:05 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 17:54:32 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:22:10 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileN
 {
 	struct stat fileInfo;	
 
+	if (inFileName.substr(inFileName.length() - 4) != ".csv") {
+		throw (std::runtime_error("ERROR: Wrong file format, must be '.csv'"));
+	}
 	if (stat(inFileName.c_str(), &fileInfo) != 0) {
 		throw (std::runtime_error("ERROR: Failed to get file information"));
     }
@@ -47,7 +50,6 @@ void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileN
 	if (S_ISREG(fileInfo.st_mode) == false) {
 		throw (std::runtime_error("ERROR: The file seems to be a folder..."));
 	}
-
 	infile.open(inFileName.c_str(), std::ifstream::in);
 	// Check if file opened successfully
 	if (!infile.is_open()) {
@@ -66,11 +68,12 @@ void BitcoinExchange::importDB(const std::string &filePath)
 
 	try {
 		openFile(inData, filePath);
+		std::getline(inData, line);
 		while (std::getline(inData, line)) {
 			float	fvalue;
 			size_t pos = line.find(",");
 			std::string keyStr = line.substr(0, pos);
-			std::string valueStr = line.substr(pos);
+			std::string valueStr = line.substr(pos + 1);
 			std::stringstream	ss(valueStr);
 			ss >> fvalue;
 			this->_db[keyStr] = fvalue;
@@ -82,6 +85,7 @@ void BitcoinExchange::importDB(const std::string &filePath)
 
 void BitcoinExchange::print(void) {
 	std::map<std::string, float>::iterator it;
+	std::cout << std::fixed << std::setprecision(2);
 	for ( it = this->_db.begin(); it != _db.end(); ++it) {
 		std::cout << it->first << " -> " << it->second << std::endl;
 	}
