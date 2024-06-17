@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 11:33:19 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 18:02:08 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:54:12 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int main (int argc, char **argv)
 		std::cout << "Error: incorrect number of arguments" << std::endl;
 		return 1;
 	}
+
 	try {
-		BitcoinExchange btc(argv[1]);
-		btc.print();
+		BitcoinExchange btc("data.csv");
+		btc.exchange(argv[1]);
 	} catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 	}

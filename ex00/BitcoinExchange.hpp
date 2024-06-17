@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 11:33:47 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 18:21:20 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/17 18:53:04 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@ class BitcoinExchange
 		const BitcoinExchange &operator=(const BitcoinExchange &other);
 
 		void importDB(const std::string &filePath);
-		void print(void) ;
+		void exchange(const std::string &filePath) const;
+		void print(void) const;
 	private:
-		void openFile(std::ifstream &infile, const std::string &inFileName);
+		void openFile(std::ifstream &infile, const std::string &inFileName) const;
 		std::map<std::string, float> _db;
 };
 

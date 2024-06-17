@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 12:59:05 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 18:22:10 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/17 19:22:44 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
 	}
 }
 
-void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileName)
+void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileName) const
 {
 	struct stat fileInfo;	
 
@@ -72,22 +72,48 @@ void BitcoinExchange::importDB(const std::string &filePath)
 		while (std::getline(inData, line)) {
 			float	fvalue;
 			size_t pos = line.find(",");
-			std::string keyStr = line.substr(0, pos);
+			std::string key = line.substr(0, pos);
 			std::string valueStr = line.substr(pos + 1);
 			std::stringstream	ss(valueStr);
 			ss >> fvalue;
-			this->_db[keyStr] = fvalue;
+			this->_db[key] = fvalue;
 		}
 	} catch (std::exception &e) {
 		throw ;
 	}
 }
 
-void BitcoinExchange::print(void) {
-	std::map<std::string, float>::iterator it;
+void BitcoinExchange::print(void) const {
+	std::map<std::string, float>::const_iterator it;
 	std::cout << std::fixed << std::setprecision(2);
-	for ( it = this->_db.begin(); it != _db.end(); ++it) {
+	for (it = this->_db.begin(); it != _db.end(); ++it) {
 		std::cout << it->first << " -> " << it->second << std::endl;
 	}
 }
+
+void BitcoinExchange::exchange(const std::string &filePath) const
+{
+	std::ifstream	inData;
+	std::string		line;
+
+	try {
+		openFile(inData, filePath);
+		std::getline(inData, line);
+		while (std::getline(inData, line)) {
+			float value;
+			size_t pos = line.find(" | ");
+			std::string key = line.substr(0, pos);
+			std::string valueStr = line.substr(pos + 3);
+			std::stringstream ss(valueStr);
+			ss >> value;
+			std::map<std::string, float>::const_iterator it = _db.find(key);
+			if (it != _db.end()) {
+				std::cout << it->first << " => " << value << " = " << it->second * value << std::endl;
+			}
+		}
+	} catch (std::exception &e) {
+		throw ;
+	}
+}
+
 
