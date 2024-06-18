@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 12:59:05 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 16:08:07 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/18 17:50:35 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileN
 	if (!infile.good()) {
 		throw (std::runtime_error("Error: Failed reading file"));
 	}
+	// Move the file pointer to the end
+	infile.seekg(0, std::ios::end);
+	// Get the current position is the file
+	std::streampos fileSize = infile.tellg();
+	if (fileSize == 0) {
+		throw (std::runtime_error("Error: input file is empty"));
+	}
+	// Move the file pointer back to the start
+	infile.seekg(0, std::ios::beg);
+	
 }
 
 void BitcoinExchange::importDB(const std::string &filePath, const std::string &ext)
@@ -103,42 +113,52 @@ void BitcoinExchange::exchange(const std::string &filePath, const std::string &e
 			throw (std::runtime_error("Error: Database is empty! Import database first"));
 		}
 		openFile(inData, filePath, ext);
-		std::getline(inData, line);
+		do {
+			std::getline(inData, line);
+		} while (line.empty());
 		if (line != "date | value") {
 			throw (std::runtime_error("Error: The header row of the input file must be \"date | value\" "));
 		}
 		std::getline(inData, line);
-		if (line.empty()) {
-			throw (std::runtime_error("Error: the input file is empty")); 
-		}
 		do {
+			if (line.empty()) {
+				std::cout << "Error: empty record" << std::endl; 
+				continue ;
+			}
+			std::string dateStr, valueStr, delim;
 			float value;
-			size_t pos = line.find(" | ");
-			if (pos == std::string::npos) {
-				std::cout << "Error: bad input" << std::endl; 
+			dateStr = line.substr(0, 10);
+			if (!isValidDateString(dateStr)) {
+				std::cout << "Error: bad input => " << dateStr << std::endl;
 				continue ;
 			}
-			std::string key = line.substr(0, pos);
-			if (!isValidDateString(key)) {
-				std::cout << "Error: bad input" << " => " << key << std::endl;
+			
+			delim = line.substr(10, 3);
+			if (delim != " | ") {
+				std::cout << "Error: record is out of format" << " => " << line << std::endl;
 				continue ;
 			}
-			std::string valueStr = line.substr(pos + 3);
+
+			valueStr = line.substr(13);
 			std::stringstream ss(valueStr);
-			ss >> value;
+			if (!(ss >> value)) {
+				std::cout << "Error: record is out of format" << " => " << line << std::endl;
+				continue ;
+			}
 			if (value <= 0) {
-				std::cout << "Error: not a poisitive number" << std::endl;
+				std::cout << "Error: not a positive number" << std::endl;
 				continue ;
 			}
 			if (value >= 1000) {
-				std::cout << "Error: too large number" << std::endl;
+				std::cout << "Error: too large a number" << std::endl;
 				continue ;
 			}
-			std::map<std::string, float>::const_iterator it = _db.find(key);
+			
+			std::map<std::string, float>::const_iterator it = _db.find(dateStr);
 			if (it == _db.end()) {
-				it = _db.lower_bound(key);
+				it = _db.lower_bound(dateStr);
 				if (it == _db.end() || it == _db.begin()) {
-					std::cout << "Error: out of range" << " => " << key << std::endl;
+					std::cout << "Error: out of range" << " => " << dateStr << std::endl;
 					continue ;
 				}
 				--it;
@@ -178,7 +198,6 @@ bool BitcoinExchange::isValidDateString(const std::string& date) const
     std::istringstream iss(date);
     if (!(iss >> year >> dash1 >> month >> dash2 >> day)) return false;
     if (dash1 != '-' || dash2 != '-') return false;
-
     return isValidDate(year, month, day);
 }
 
