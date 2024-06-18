@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 12:59:05 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/17 19:22:44 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/18 10:35:21 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ const BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other)
 
 BitcoinExchange::BitcoinExchange(const std::string &filePath)
 {
-	importDB(filePath);
+	importDB(filePath, ".csv");
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
@@ -36,13 +36,15 @@ BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
 	}
 }
 
-void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileName) const
+void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileName, const std::string ext) const
 {
 	struct stat fileInfo;	
 
-	if (inFileName.substr(inFileName.length() - 4) != ".csv") {
-		throw (std::runtime_error("ERROR: Wrong file format, must be '.csv'"));
-	}
+	if (ext != "") {
+		if (inFileName.substr(inFileName.length() - 4) != ext) {
+			throw (std::runtime_error("ERROR: Wrong file format, must be '.csv'"));
+		}
+	} 
 	if (stat(inFileName.c_str(), &fileInfo) != 0) {
 		throw (std::runtime_error("ERROR: Failed to get file information"));
     }
@@ -61,13 +63,13 @@ void BitcoinExchange::openFile(std::ifstream &infile, const std::string &inFileN
 	}
 }
 
-void BitcoinExchange::importDB(const std::string &filePath)
+void BitcoinExchange::importDB(const std::string &filePath, const std::string &ext)
 {
 	std::ifstream		inData;
 	std::string			line;
 
 	try {
-		openFile(inData, filePath);
+		openFile(inData, filePath, ext);
 		std::getline(inData, line);
 		while (std::getline(inData, line)) {
 			float	fvalue;
@@ -91,15 +93,25 @@ void BitcoinExchange::print(void) const {
 	}
 }
 
-void BitcoinExchange::exchange(const std::string &filePath) const
+void BitcoinExchange::exchange(const std::string &filePath, const std::string &ext) const
 {
 	std::ifstream	inData;
 	std::string		line;
 
 	try {
-		openFile(inData, filePath);
+		if (_db.empty()) {
+			throw (std::runtime_error("ERROR: Database is empty! Import database first"));
+		}
+		openFile(inData, filePath, ext);
 		std::getline(inData, line);
-		while (std::getline(inData, line)) {
+		if (line != "date | value") {
+			throw (std::runtime_error("ERROR: The header row of the input file must be \"date | value\" "));
+		}
+		std::getline(inData, line);
+		if (line.empty()) {
+			throw (std::runtime_error("ERROR: the input file is empty")); 
+		}
+		do {
 			float value;
 			size_t pos = line.find(" | ");
 			std::string key = line.substr(0, pos);
@@ -110,7 +122,7 @@ void BitcoinExchange::exchange(const std::string &filePath) const
 			if (it != _db.end()) {
 				std::cout << it->first << " => " << value << " = " << it->second * value << std::endl;
 			}
-		}
+		} while (std::getline(inData, line));
 	} catch (std::exception &e) {
 		throw ;
 	}
