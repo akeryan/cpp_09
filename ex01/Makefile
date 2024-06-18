@@ -6,7 +6,7 @@
 #    By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 13:18:01 by akeryan           #+#    #+#              #
-#    Updated: 2024/06/18 17:55:42 by akeryan          ###   ########.fr        #
+#    Updated: 2024/06/18 18:36:19 by akeryan          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,9 @@ CXX = c++
 RM = rm -rf
 
 SRC_FILES = main.cpp	\
-			BitcoinExchange.cpp	
+			RPN.cpp	
 
-INCLUDE_FILES = BitcoinExchange.hpp	
+INCLUDE_FILES = RPN.hpp	
 
 OBJ = $(patsubst %.cpp, %.o, $(SRC_FILES))
 
