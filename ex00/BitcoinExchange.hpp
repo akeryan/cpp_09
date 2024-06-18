@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/16 11:33:47 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 10:22:13 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/18 16:01:04 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ class BitcoinExchange
 		void exchange(const std::string &filePath, const std::string &ext = "") const;
 		void print(void) const;
 	private:
+		bool isValidDateString(const std::string &date) const;
+	 	bool isLeapYear(int year) const;
+		bool isValidDate(int year, int month, int day) const;
 		void openFile(std::ifstream &infile, const std::string &inFileName, const std::string ext = "") const;
 		std::map<std::string, float> _db;
 };

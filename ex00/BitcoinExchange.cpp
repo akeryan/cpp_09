@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 12:59:05 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 14:46:17 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/18 16:08:07 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,15 @@ void BitcoinExchange::exchange(const std::string &filePath, const std::string &e
 		do {
 			float value;
 			size_t pos = line.find(" | ");
+			if (pos == std::string::npos) {
+				std::cout << "Error: bad input" << std::endl; 
+				continue ;
+			}
 			std::string key = line.substr(0, pos);
+			if (!isValidDateString(key)) {
+				std::cout << "Error: bad input" << " => " << key << std::endl;
+				continue ;
+			}
 			std::string valueStr = line.substr(pos + 3);
 			std::stringstream ss(valueStr);
 			ss >> value;
@@ -130,7 +138,7 @@ void BitcoinExchange::exchange(const std::string &filePath, const std::string &e
 			if (it == _db.end()) {
 				it = _db.lower_bound(key);
 				if (it == _db.end() || it == _db.begin()) {
-					std::cout << "Error: bad input" << " => " << key << std::endl;
+					std::cout << "Error: out of range" << " => " << key << std::endl;
 					continue ;
 				}
 				--it;
@@ -140,6 +148,38 @@ void BitcoinExchange::exchange(const std::string &filePath, const std::string &e
 	} catch (std::exception &e) {
 		throw ;
 	}
+}
+
+bool BitcoinExchange::isLeapYear(int year) const 
+{
+    if (year % 4 != 0) return false;
+    if (year % 100 != 0) return true;
+    if (year % 400 != 0) return false;
+    return true;
+}
+
+bool BitcoinExchange::isValidDate(int year, int month, int day) const
+{
+    if (month < 1 || month > 12) return false;
+    
+    int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+    if (isLeapYear(year)) daysInMonth[1] = 29;
+    
+    return day > 0 && day <= daysInMonth[month - 1];
+}
+
+bool BitcoinExchange::isValidDateString(const std::string& date) const
+{
+    if (date.length() != 10) return false;
+    if (date[4] != '-' || date[7] != '-') return false;
+
+    int year, month, day;
+    char dash1, dash2;
+    std::istringstream iss(date);
+    if (!(iss >> year >> dash1 >> month >> dash2 >> day)) return false;
+    if (dash1 != '-' || dash2 != '-') return false;
+
+    return isValidDate(year, month, day);
 }
 
 
