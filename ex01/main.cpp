@@ -6,23 +6,20 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:56:19 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/19 11:20:27 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/19 13:07:21 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
 
-int main(void) 
+int main(int argc, char **argv) 
 {
-	std::string str = "8 9 * 9 - 9 - 9 - 4 - 1 +";
-	RPN rpn;
-
-	try {
-		rpn.readString(str);
-		rpn.print();
-		std::cout << "result: " << rpn.compute() << std::endl;
-	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
+	if (argc !=2) {
+		std::cout << "Error: should take only one string argument";
+		return 1;
 	}
+	RPN rpn;
+	rpn.readString(argv[1]);
+	rpn.compute();
 	return 0;
 }

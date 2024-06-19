@@ -49,35 +49,48 @@ void RPN::print(void) const
 	}
 }
 
-float RPN::compute(void) const
+void RPN::compute(void) const
 {
 	std::queue<char> que = _expr;
 	float result = 0.0f;
 
 	if (!que.empty()) {
 		char ch = que.front();
-		if (ch < '0' || ch > '9')
-			throw(std::runtime_error("Error: element is not a digit"));
+		if (ch < '0' || ch > '9') {
+			std::cout << "Error" << std::endl;
+			return ;
+		}
 		result = ch - '0';
 		que.pop();
-	} else return 0.0f;
-	_run(result, que);
-	return result;
+	} else {
+		std::cout << 0 << std::endl;
+		return ;
+	};
+	if (_run(result, que) == -1) {
+		return ;
+	}
+	std::cout << result << std::endl;
 }
 
-void RPN::_run(float &result, std::queue<char> &que) const
+int RPN::_run(float &result, std::queue<char> &que) const
 {
 	int a;
 	char x;
 
 	if (!que.empty()) {
 		char ch = que.front();
-		if (ch < '0' || ch > '9')
-			throw(std::runtime_error("Error: element is not a digit"));
+		if (ch < '0' || ch > '9') {
+			if (ch == '(' || ch == ')') {
+				std::cout << "Error" << std::endl;
+				return -1;
+			}
+			result = 0.0f ;
+			return 0;
+		}
 		a = ch - '0';
 		que.pop();
 	} else {
-		return ;
+		return 0;
 	}
 	if (!que.empty()) {
 		x = que.front();
@@ -90,11 +103,18 @@ void RPN::_run(float &result, std::queue<char> &que) const
 			result = result + a;
 		else if (x == '-')
 			result = result - a;
-		else
-			throw (std::runtime_error("Error: couldn't find correct operation (*, /, +, -)"));
+		else if (x == '(' || x == ')') {
+				std::cout << "Error" << std::endl;
+				return -1;
+		} else { 
+			result = 0.0f;
+			return 0;
+		}
 	} else {
 		result = 0.0f;
-		std::cerr << "Error: expression is in wrong format" << std::endl;
+		return 0;
 	}
-	_run(result, que);	
+	if (_run(result, que) == -1)	
+		return -1;
+	return 0;
 }
