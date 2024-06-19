@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:56:01 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 19:22:48 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/19 10:38:13 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ class RPN
 		const RPN &operator=(const RPN &other);
 		void readString(const std::string &str);
 		void print(void) const;
-		void process(void) const;
+		float compute(void) const;
 	private:
+		void _run(float &r, std::queue<char> &que) const;
 		std::queue<char> _expr;
 };
 

@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:56:10 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 19:38:23 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/19 11:18:58by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,52 +49,52 @@ void RPN::print(void) const
 	}
 }
 
-void RPN::process(void) const
+float RPN::compute(void) const
 {
-	std::queue<char> tmp = _expr;
+	std::queue<char> que = _expr;
 	float result = 0.0f;
+
+	if (!que.empty()) {
+		char ch = que.front();
+		if (ch < '0' || ch > '9')
+			throw(std::runtime_error("Error: element is not a digit"));
+		result = ch - '0';
+		que.pop();
+	} else return 0.0f;
+	_run(result, que);
+	return result;
+}
+
+void RPN::_run(float &result, std::queue<char> &que) const
+{
 	int a;
-	int b;
 	char x;
-	if (!tmp.empty()) {
-		char ch = tmp.front();
+
+	if (!que.empty()) {
+		char ch = que.front();
 		if (ch < '0' || ch > '9')
 			throw(std::runtime_error("Error: element is not a digit"));
 		a = ch - '0';
-		tmp.pop();
+		que.pop();
 	} else {
-		throw(std::runtime_error("Error: RPN is of wrong format"));
+		return ;
 	}
-	result = a;
-	if (!tmp.empty()) {
-		char ch = tmp.front();
-		if (ch < '0' || ch > '9')
-			throw(std::runtime_error("Error: element is not a digit"));
-		b = ch - '0';
-		tmp.pop();
+	if (!que.empty()) {
+		x = que.front();
+		que.pop();
+		if (x == '*')
+			result = result * a;
+		else if (x == '/')
+			result = result / a;
+		else if (x == '+')
+			result = result + a;
+		else if (x == '-')
+			result = result - a;
+		else
+			throw (std::runtime_error("Error: couldn't find correct operation (*, /, +, -)"));
 	} else {
-		throw(std::runtime_error("Error: RPN is of wrong format"));
+		result = 0.0f;
+		std::cerr << "Error: expression is in wrong format" << std::endl;
 	}
-	if (!tmp.empty()) {
-		x = tmp.front();
-		switch (x) {
-			case 42:
-				result = result * b;
-				break ;
-			case 47:
-				result = result / b;
-				break ;
-			case 43:
-				result = result + b;
-				break;
-			case 45:
-				result = result - b;
-				break;
-			default:
-				throw (std::runtime_error("Error: couldn't find correct operation (*, /, +, -)"));
-		}
-	} else {
-		throw(std::runtime_error("Error: RPN is of wrong format"));
-	}
-	std::cout << "result: " << result << std::endl;
+	_run(result, que);	
 }

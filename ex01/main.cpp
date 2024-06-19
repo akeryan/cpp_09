@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:56:19 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/18 19:33:47 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/19 11:20:27 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 
 int main(void) 
 {
-	std::string str = "8 9 * 5 -";
+	std::string str = "8 9 * 9 - 9 - 9 - 4 - 1 +";
 	RPN rpn;
 
 	try {
 		rpn.readString(str);
-		//rpn.print();
-		rpn.process();
+		rpn.print();
+		std::cout << "result: " << rpn.compute() << std::endl;
 	} catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 	}
-
 	return 0;
 }
