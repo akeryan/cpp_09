@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:56:19 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/19 13:07:21 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 09:03:42 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ int main(int argc, char **argv)
 	}
 	RPN rpn;
 	rpn.readString(argv[1]);
-	rpn.compute();
+	try {
+		rpn.compute();
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
 	return 0;
 }

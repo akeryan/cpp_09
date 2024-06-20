@@ -97,9 +97,11 @@ int RPN::_run(float &result, std::queue<char> &que) const
 		que.pop();
 		if (x == '*')
 			result = result * a;
-		else if (x == '/')
+		else if (x == '/') {
+			if (a == 0)
+				throw (std::runtime_error("Error: division by zero"));
 			result = result / a;
-		else if (x == '+')
+		} else if (x == '+')
 			result = result + a;
 		else if (x == '-')
 			result = result - a;
