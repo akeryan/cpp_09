@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:34:10 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 14:26:40 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 14:59:14 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ int main(int argc, char **argv)
 	pme.pairSort();
 	pme.printDeque(pme.getD());
 	std::cout << "---------------" << std::endl;
-	pme.merge();
+	try {
+		pme.merge();
+	} catch(std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
 	return 0;
 }
