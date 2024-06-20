@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:46 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 16:37:58 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 18:17:13 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,56 +56,51 @@ void PmergeMe::printDeque(const std::deque<int> &d) const {
 	if (d.empty())
 		return ;
 	for (std::deque<int>::const_iterator it = d.begin(); it != d.end(); ++it) {
-		std::cout << *it << std::endl;
+		std::cout << *it << " ";
 	}
+	std::cout << std::endl;
 }
 
 void PmergeMe::merge(void) {
 	if (D.empty()) 
 		throw (std::runtime_error("Error: container is empty"));
-	std::deque<int> d;
-	std::deque<int>::iterator it1, it2;
-	it1 = it2 = D.begin();
-	do {
-		advance(D, it2, 2);
-		int i1 = (D.end() - it1 >= 2) ? 2 : D.end() - it1;
-		int i2 = (D.end() - it2 >= 2) ? 2 : D.end() - it2;
-		while (i1 > 0 || i2 > 0) {
-			if (i1 == 0 && it2 != D.end())	{
-				d.push_back(*it2++);
-				i2--;
-			} else if (i2 == 0 && it1 != D.end()) {
-				d.push_back(*it1++);
-				i1--;
-			} else if (it1 != D.end() && it2 != D.end()) {
-				if (*it1 < *it2) {
-					d.push_back(*it1++);
-					i1--;
-				} else {
+	std::deque<int> S = D; //source
+	long K = 2;
+	while (K < (long)S.size())  {
+		std::deque<int> d;
+		std::deque<int>::iterator it1, it2;
+		it1 = it2 = S.begin();
+		do {
+			advance(S, it2, K);
+			int i1 = (S.end() - it1 >= K) ? K : S.end() - it1;
+			int i2 = (S.end() - it2 >= K) ? K : S.end() - it2;
+			while (i1 > 0 || i2 > 0) {
+				if (i1 == 0 && it2 != S.end())	{
 					d.push_back(*it2++);
 					i2--;
-				}
-			} else {
-				while (it1 != D.end() && i1-- > 0)
+				} else if (i2 == 0 && it1 != S.end()) {
 					d.push_back(*it1++);
-				while (it2 != D.end() && i2-- > 0)
-					d.push_back(*it2++);
+					i1--;
+				} else if (it1 != S.end() && it2 != S.end()) {
+					if (*it1 < *it2) {
+						d.push_back(*it1++);
+						i1--;
+					} else {
+						d.push_back(*it2++);
+						i2--;
+					}
+				} else {
+					while (it1 != S.end() && i1-- > 0)
+						d.push_back(*it1++);
+					while (it2 != S.end() && i2-- > 0)
+						d.push_back(*it2++);
+				}
 			}
-		}
-		advance(D, it1, 2);
-		it2 = it1;
-	} while (it1 != D.end() && it2 != D.end());
-	printDeque(d);
+			advance(S, it1, K);
+			it2 = it1;
+		} while (it1 != S.end() && it2 != S.end());
+		S = d;
+		K *= 2;
+	}
+	printDeque(S);
 }
-
-//void PmergeMe::insertionSort(void) {
-	//for (std::deque<int>::iterator it1 = D.begin() + 1; it1 != D.end(); ++it1) {
-		//std::deque<int>::iterator it2 = it1;
-		//while (it2 != D.begin() && *(it2 - 1) > *it2) {
-			//int tmp = *(it2 - 1);
-			//*(it2 - 1) = *it2;
-			//*it2 = tmp;
-			//--it2;
-		//}
-	//}
-//}
