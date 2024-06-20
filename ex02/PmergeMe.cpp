@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:46 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 18:17:13 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 18:27:10 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ PmergeMe::PmergeMe(const PmergeMe &other) {
 		*this = other;
 }
 
+void PmergeMe::sort(void) {
+	pairSort();
+	mergeSort();
+}
+
 void PmergeMe::pairSort(void) {
 	std::deque<int>::iterator it = D.begin();
 	while (D.end() - it >= 2) {
@@ -61,7 +66,7 @@ void PmergeMe::printDeque(const std::deque<int> &d) const {
 	std::cout << std::endl;
 }
 
-void PmergeMe::merge(void) {
+void PmergeMe::mergeSort(void) {
 	if (D.empty()) 
 		throw (std::runtime_error("Error: container is empty"));
 	std::deque<int> S = D; //source
@@ -102,5 +107,5 @@ void PmergeMe::merge(void) {
 		S = d;
 		K *= 2;
 	}
-	printDeque(S);
+	D = S;
 }
