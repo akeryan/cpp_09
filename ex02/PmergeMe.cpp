@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:46 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 18:27:10 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 19:45:40 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,52 +19,42 @@ PmergeMe::~PmergeMe() { }
 const PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
 	if (this != &other) {
 		this->D = other.D;
-		this->_lst = other._lst;
+		this->L = other.L;
 	}
 	return *this;
 }
 
 void PmergeMe::pushDeque(int a) { D.push_back(a); }
 
-const std::deque<int> &PmergeMe::getD(void) const {
-	return D;
-}
+void PmergeMe::pushList(int a) { L.push_back(a); }
 
-void PmergeMe::advance(std::deque<int> &d, std::deque<int>::iterator &it, unsigned int steps) const {
-	while (steps-- > 0 && it != d.end())
-		it++;
-}
+std::deque<int> &PmergeMe::getD(void) { return D; }
+
+std::list<int> &PmergeMe::getL(void) { return L; }
+
 
 PmergeMe::PmergeMe(const PmergeMe &other) {
 	if (this != &other) 
 		*this = other;
 }
 
-void PmergeMe::sort(void) {
-	pairSort();
-	mergeSort();
-}
+//void PmergeMe::sort(void) {
+	//pairSort(D);
+	//mergeSort(D);
+//}
 
-void PmergeMe::pairSort(void) {
-	std::deque<int>::iterator it = D.begin();
-	while (D.end() - it >= 2) {
-		if (*it > *(it + 1)) {
-			int tmp = *it;
-			*it = *(it + 1);
-			*(it + 1) = tmp;
-		} 
-		advance(D, it, 2);
-	}
-}
+//void PmergeMe::pairSort() {
+	//std::deque<int>::iterator it = D.begin();
+	//while (D.end() - it >= 2) {
+		//if (*it > *(it + 1)) {
+			//int tmp = *it;
+			//*it = *(it + 1);
+			//*(it + 1) = tmp;
+		//} 
+		//advance(D, it, 2);
+	//}
+//}
 
-void PmergeMe::printDeque(const std::deque<int> &d) const {
-	if (d.empty())
-		return ;
-	for (std::deque<int>::const_iterator it = d.begin(); it != d.end(); ++it) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-}
 
 void PmergeMe::mergeSort(void) {
 	if (D.empty()) 
