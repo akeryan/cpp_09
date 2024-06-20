@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:46 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 15:12:47 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 16:37:58 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void PmergeMe::merge(void) {
 	std::deque<int> d;
 	std::deque<int>::iterator it1, it2;
 	it1 = it2 = D.begin();
-	//do {
+	do {
 		advance(D, it2, 2);
 		int i1 = (D.end() - it1 >= 2) ? 2 : D.end() - it1;
 		int i2 = (D.end() - it2 >= 2) ? 2 : D.end() - it2;
@@ -92,12 +92,10 @@ void PmergeMe::merge(void) {
 					d.push_back(*it2++);
 			}
 		}
-		printDeque(d);
-		std::cout << "it1: " << *it1 << std::endl;
-		std::cout << "it2: " << *it2 << std::endl;
-		//advance(D, it1, 3);
-		//it2 = it1;
-	//} while (it1 != D.end() && it2 != D.end());
+		advance(D, it1, 2);
+		it2 = it1;
+	} while (it1 != D.end() && it2 != D.end());
+	printDeque(d);
 }
 
 //void PmergeMe::insertionSort(void) {
