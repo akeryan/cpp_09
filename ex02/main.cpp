@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:34:10 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/19 19:21:56 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/20 14:26:40 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ int main(int argc, char **argv)
 		else
 			std::cout << "Error: wrong input" << std::endl;
 	}
-	pme.printDeque();
+	pme.printDeque(pme.getD());
 	std::cout << "---------------" << std::endl;
-	//pme.insertionSort();
 	pme.pairSort();
-	pme.printDeque();
+	pme.printDeque(pme.getD());
+	std::cout << "---------------" << std::endl;
+	pme.merge();
 	return 0;
 }
