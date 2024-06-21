@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:46 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/21 11:00:51 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/21 13:30:39 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,4 @@ void PmergeMe::sort(void) {
 	duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
 	std::cout	<< "Time to process a range of " << V.size() << " elements with std::vector\t: " \
 				<< std::fixed << std::setprecision(5) << (double long)duration/1000000 << " us" << std::endl;
-
-
 }
