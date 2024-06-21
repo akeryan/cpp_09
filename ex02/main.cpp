@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:34:10 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/20 19:49:50 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/21 08:30:44 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ int main(int argc, char **argv)
 			std::cout << "Error: wrong input" << std::endl;
 	}
 	try {
-		//pme.sort();
-		pme.pairSort(pme.getL());
-		pme.print(pme.getL());
+		pme.sort();
 	} catch(std::exception &e) {
 		std::cout << e.what() << std::endl;
 	}
