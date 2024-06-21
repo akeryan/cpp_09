@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:36 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/21 08:34:57 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/21 11:06:46 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 #define PMERGEME_HPP
 
 # include <iostream>
+# include <iomanip>
 # include <deque>
 # include <vector>
-# include <iterator> //advance
+# include <chrono>
 
 class PmergeMe
 {
@@ -26,26 +27,21 @@ class PmergeMe
 		PmergeMe(const PmergeMe &other);
 		const PmergeMe &operator=(const PmergeMe &other);
 
-		template <typename Container>
-		void print(const Container &C) const;
-		
-		void pushDeque(int a);
-		void pushList(int a);
-		
+		void push(const int a);
 		void sort(void);
 
 		template <typename Container>
-		void pairSort(Container &C);
+		void print(const Container &C);
 
 		template <typename Container>
-		void mergeSort(Container &C);
+		static void pairSort(Container &C);
 
-		std::deque<int> &getD(void); 
-		std::vector<int> &getL(void); 
+		template <typename Container>
+		static void mergeSort(Container &C);
 
 	private:
 		template <typename Container>
-		void advance(Container &C, typename Container::iterator &it, unsigned int steps) const;
+		static void advance(Container &C, typename Container::iterator &it, unsigned int steps);
 		std::deque<int> D;
 		std::vector<int> V;
 };
@@ -64,19 +60,28 @@ void PmergeMe::pairSort(Container &C) {
 }
 
 template <typename Container>
-void PmergeMe::advance(Container &C, typename Container::iterator &it, unsigned int steps) const {
+void PmergeMe::advance(Container &C, typename Container::iterator &it, unsigned int steps) {
 	while (steps-- > 0 && it != C.end())
 		it++;
 }
 
 template <typename Container>
-void PmergeMe::print(const Container &C) const {
+void PmergeMe::print(const Container &C) {
 	if (C.empty())
 		return ;
-	for (typename Container::const_iterator it = C.begin(); it != C.end(); ++it) {
+	unsigned int s;
+	if (D.size() <= 10)
+		s = D.size();
+	else 
+		s = 4;
+	std::cout << "\t";
+	for (typename Container::const_iterator it = C.begin(); it != C.end() && s-- > 0; ++it) {
 		std::cout << *it << " ";
 	}
-	std::cout << std::endl;
+	if (D.size() > 10)
+		std::cout << "[...]" << std::endl;
+	else
+		std::cout << std::endl;
 }
 
 template <typename Container>
@@ -123,6 +128,5 @@ void PmergeMe::mergeSort(Container &C) {
 	}
 	C = S;
 }
-
 
 #endif
