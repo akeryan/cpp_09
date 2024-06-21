@@ -6,7 +6,7 @@
 /*   By: akeryan <akeryan@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 13:39:36 by akeryan           #+#    #+#             */
-/*   Updated: 2024/06/21 11:06:46 by akeryan          ###   ########.fr       */
+/*   Updated: 2024/06/21 13:27:05 by akeryan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void PmergeMe::print(const Container &C) {
 		std::cout << *it << " ";
 	}
 	if (D.size() > 10)
-		std::cout << "[...]" << std::endl;
+		std::cout << "[..]" << std::endl;
 	else
 		std::cout << std::endl;
 }
